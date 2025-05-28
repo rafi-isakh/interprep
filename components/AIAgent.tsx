@@ -2,10 +2,9 @@
 
 import React, {useEffect, useState} from 'react'
 import Image from "next/image";
-import {cn} from "@/lib/utils";
+import {cn, createWorkflow} from "@/lib/utils";
 import {useRouter} from "next/navigation";
 import { vapi } from '@/lib/vapi.sdk';
-import {generator} from "@/constants";
 
 enum CallStatus {
     INACTIVE = 'INACTIVE',
@@ -67,13 +66,8 @@ const AIAgent = ({ userName, userId, type }: AgentProps) => {
 
     const handleCall = async () => {
         setCallStatus(CallStatus.CONNECTING);
-        // await vapi.start(generator, {
-        //     variableValues: {
-        //         username: userName,
-        //         userid: userId
-        //     }
-        // })
-        await vapi.start(undefined, undefined, undefined, generator)
+        const workflow = createWorkflow(userId!);
+        await vapi.start(undefined, undefined, undefined, workflow)
     }
 
     const handleDisconnect = async () => {
